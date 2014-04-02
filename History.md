@@ -1,4 +1,16 @@
 
+0.0.8 / 2014-04-01
+==================
+
+ * fix traversing to '#' on close
+ * dialog should start in "hide" state
+ * fixing usage of domify
+ * update overlay version
+ * Replace jQuery dependency
+ * Pass options in overlay() to overlay component. Make escapable() public.
+ * Fixed close button with HTML code.
+ * Update template.html
+
 0.0.7 / 2013-05-27 
 ==================
 
