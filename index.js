@@ -45,7 +45,7 @@ function dialog(title, msg){
     case 1:
       return new Dialog({ message: title });
   }
-};
+}
 
 /**
  * Initialize a new `Dialog`.
@@ -75,13 +75,13 @@ function Dialog(options) {
   if (exports.effect) this.effect(exports.effect);
   this.on('escape', this.hide.bind(this));
   active = this;
-};
+}
 
 /**
  * Inherit from `Emitter.prototype`.
  */
 
-Dialog.prototype = new Emitter;
+Dialog.prototype = new Emitter();
 
 /**
  * Render with the given `options`.
@@ -218,7 +218,7 @@ Dialog.prototype.escapable = function(){
 Dialog.prototype.fixed = function(){
   this._fixed = true;
   return this;
-}
+};
 
 /**
  * Show the dialog.
@@ -246,7 +246,7 @@ Dialog.prototype.show = function(){
   document.body.appendChild(this.el);
   if (!this._fixed) {
     setTimeout(function() {
-      self.el.style.marginLeft = -(self.el.offsetWidth / 2) + 'px'
+      self.el.style.marginLeft = -(self.el.offsetWidth / 2) + 'px';
     }, 0);
   }
   this._classes.remove('hide');

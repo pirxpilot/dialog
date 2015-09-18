@@ -1,17 +1,46 @@
 {
-  "name": "dialog-component",
-  "description": "Dialog component",
+  "name": "code42day-dialog",
   "version": "0.3.0",
+  "description": "Dialog component",
+  "scripts": {
+    "test": "make check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code42day/dialog.git"
+  },
   "keywords": [
+    "browser",
     "dialog",
-    "ui"
+    "ui",
+    "modal"
   ],
   "dependencies": {
-    "query-component": "0.0.1",
-    "event-component": "~0.1.0",
-    "emitter-component": "~1.1.1",
-    "domify": "~1.1.1",
-    "overlay-component": "~0.1.0",
-    "classes-component": "~1.1.3"
+    "component-emitter": "^1.0.0",
+    "component-domify": "*",
+    "component-event": "*",
+    "component-classes": "*",
+    "component-query": "*",
+    "overlay-component": "~0"
+  },
+  "browser": {
+    "emitter": "component-emitter",
+    "overlay": "overlay-component",
+    "domify": "component-domify",
+    "event": "component-event",
+    "classes": "component-classes",
+    "query": "component-query"
+  },
+  "browserify": {
+    "transform": [
+      "stringify"
+    ]
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/code42day/dialog/issues"
+  },
+  "devDependencies": {
+    "stringify": "^3.1.0"
   }
 }

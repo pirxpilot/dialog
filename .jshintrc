@@ -1,0 +1,13 @@
+{
+  "undef": true,
+  "unused": true,
+  "laxbreak": true,
+  "laxcomma": true,
+  "browser": true,
+  "globals": {
+    "console": false,
+    "exports": true,
+    "require": false,
+    "module": false
+  }
+}
