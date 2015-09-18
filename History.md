@@ -1,4 +1,10 @@
 
+1.1.0 / 2015-09-18
+==================
+
+ * use CSS to center dialog
+ * simplify dialog template
+
 1.0.1 / 2015-09-18
 ==================
 
