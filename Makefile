@@ -1,22 +1,32 @@
+PROJECT=dialog
+CSS=\
+	node_modules/overlay-component/overlay.css \
+	dialog.css
 
-all: build
+all: check compile
 
-components: component.json
-	component install --dev
+check: lint
 
-build: index.js dialog.css template.html | components
-	component build --dev
+lint:
+	jshint index.js
+
+compile: build/build.js build/build.css
+
+build:
+	mkdir -p $@
+
+build/build.js: node_modules index.js | build
+	browserify --require ./index.js:$(PROJECT) --outfile $@
+
+.DELETE_ON_ERROR: build/build.js
+
+build/build.css: $(CSS) | build
+	cat $^ > $@
+
+node_modules: package.json
+	npm install
 
 clean:
-	rm -rf components build
+	rm -fr build node_modules
 
-test: test-phantom
-
-test-phantom: | build
-	component test phantom
-
-test-browser: | build
-	component test browser
-
-
-.PHONY: all clean test test-phantom test-browser
+.PHONY: clean lint check all build

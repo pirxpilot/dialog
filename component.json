@@ -1,5 +1,6 @@
 {
   "name": "dialog",
+  "repo": "code42day/dialog",
   "description": "Dialog component",
   "version": "0.2.0",
   "keywords": [
