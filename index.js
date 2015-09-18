@@ -209,18 +209,6 @@ Dialog.prototype.escapable = function(){
 };
 
 /**
- * Fixed dialogs position can be manipulated through CSS.
- *
- * @return {Dialog} for chaining
- * @api public
- */
-
-Dialog.prototype.fixed = function(){
-  this._fixed = true;
-  return this;
-};
-
-/**
  * Show the dialog.
  *
  * Emits "show" event.
@@ -242,14 +230,12 @@ Dialog.prototype.show = function(){
   // escape
   if (!overlay || overlay.closable) this.escapable();
 
-  // position
+  // show
   document.body.appendChild(this.el);
-  if (!this._fixed) {
-    setTimeout(function() {
-      self.el.style.marginLeft = -(self.el.offsetWidth / 2) + 'px';
-    }, 0);
-  }
-  this._classes.remove('hide');
+  setTimeout(function() {
+    // let render before removing hide for effects to kick in
+    self._classes.remove('hide');
+  }, 0);
   this.emit('show');
   return this;
 };

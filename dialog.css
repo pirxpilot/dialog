@@ -1,6 +1,7 @@
 .dialog {
-  position: fixed;
+  position: absolute;
   left: 50%;
+  transform: translateX(-50%);
   top: 150px;
   max-width: 600px;
   min-width: 250px;

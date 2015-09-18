@@ -19,6 +19,7 @@
       .dialog.off-center {
         top: 20px;
         left: 15%;
+        transform: translateX(0);
       }
     </style>
   </head>
@@ -85,7 +86,6 @@
                     dialog('This one is not centered')
                     .effect('fade')
                     .closable()
-                    .fixed()
                     .addClass('off-center')
                     .show()
                     .on('hide', function(){
