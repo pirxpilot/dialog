@@ -10,7 +10,7 @@
 ## Installation
 
 ```
-$ npm install dialog-component
+$ npm install @pirxpilot/dialog
 ```
 
 ## Features

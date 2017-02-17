@@ -1,5 +1,5 @@
 {
-  "name": "code42day-dialog",
+  "name": "@pirxpilot/dialog",
   "version": "1.1.0",
   "description": "Dialog component",
   "scripts": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/code42day/dialog.git"
+    "url": "pirxpilot/dialog.git"
   },
   "keywords": [
     "browser",
@@ -37,9 +37,6 @@
     ]
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/code42day/dialog/issues"
-  },
   "devDependencies": {
     "stringify": "^3.1.0"
   }
