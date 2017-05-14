@@ -1,4 +1,10 @@
 
+1.1.2 / 2017-05-13
+==================
+
+ * replace .npmignore with package.files
+ * replace overlay-component with @pirxpilot/overlay
+
 1.1.1 / 2017-02-16
 ==================
 
