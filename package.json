@@ -16,16 +16,16 @@
     "modal"
   ],
   "dependencies": {
-    "component-emitter": "^1.0.0",
-    "component-domify": "*",
-    "component-event": "*",
+    "@pirxpilot/overlay": "*",
     "component-classes": "*",
-    "component-query": "*",
-    "overlay-component": "~0"
+    "component-domify": "*",
+    "component-emitter": "^1.0.0",
+    "component-event": "*",
+    "component-query": "*"
   },
   "browser": {
     "emitter": "component-emitter",
-    "overlay": "overlay-component",
+    "overlay": "@pirxpilot/overlay",
     "domify": "component-domify",
     "event": "component-event",
     "classes": "component-classes",
