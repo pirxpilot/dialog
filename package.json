@@ -39,5 +39,11 @@
   "license": "MIT",
   "devDependencies": {
     "stringify": "^3.1.0"
-  }
+  },
+  "files": [
+    "index.js",
+    "dialog.css",
+    "template.html"
+  ]
+
 }
