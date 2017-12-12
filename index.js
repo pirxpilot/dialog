@@ -6,7 +6,6 @@
 var Emitter = require('emitter')
   , overlay = require('overlay')
   , domify = require('domify')
-  , events = require('event')
   , query = require('query');
 
 /**
@@ -96,7 +95,7 @@ Dialog.prototype.render = function(options){
     , pEl = query('p', el)
     , msg = options.message;
 
-  events.bind(query('.close', el), 'click', function (ev) {
+  query('.close', el).addEventListener('click', function (ev) {
     ev.preventDefault();
     self.emit('close');
     self.hide();
@@ -202,7 +201,7 @@ Dialog.prototype.escapable = function(){
     if (27 !== e.which) return;
     self.emit('escape');
   };
-  events.bind(document, 'keydown', self._escKeyCallback);
+  document.addEventListener('keydown', self._escKeyCallback);
   return this;
 };
 
@@ -265,7 +264,7 @@ Dialog.prototype.hide = function(ms){
   var self = this;
 
   if (self._escKeyCallback) {
-    events.unbind(document, 'keydown', self._escKeyCallback);
+    document.removeEventListener('keydown', self._escKeyCallback);
   }
 
   // prevent thrashing - this isn't used
