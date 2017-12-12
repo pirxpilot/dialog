@@ -1,4 +1,11 @@
 
+1.1.3 / 2017-12-12
+==================
+
+ * minify HTML template
+ * remove component-event
+ * remove component-classes
+
 1.1.2 / 2017-05-13
 ==================
 
