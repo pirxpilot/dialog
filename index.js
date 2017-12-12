@@ -7,7 +7,6 @@ var Emitter = require('emitter')
   , overlay = require('overlay')
   , domify = require('domify')
   , events = require('event')
-  , classes = require('classes')
   , query = require('query');
 
 /**
@@ -69,7 +68,6 @@ function Dialog(options) {
   options = options || {};
   this.template = require('./template.html');
   this.el = domify(this.template);
-  this._classes = classes(this.el);
   this.render(options);
   if (active && !active.hiding) active.hide();
   if (exports.effect) this.effect(exports.effect);
@@ -141,7 +139,7 @@ Dialog.prototype.closable = function(){
  */
 
 Dialog.prototype.addClass = function(name){
-  this._classes.add(name);
+  this.el.classList.add(name);
   return this;
 };
 
@@ -224,7 +222,7 @@ Dialog.prototype.show = function(){
   // overlay
   if (overlay) {
     overlay.show();
-    this._classes.add('modal');
+    this.el.classList.add('modal');
   }
 
   // escape
@@ -234,7 +232,7 @@ Dialog.prototype.show = function(){
   document.body.appendChild(this.el);
   setTimeout(function() {
     // let render before removing hide for effects to kick in
-    self._classes.remove('hide');
+    self.el.classList.remove('hide');
   }, 0);
   this.emit('show');
   return this;
@@ -282,7 +280,7 @@ Dialog.prototype.hide = function(ms){
   }
 
   // hide / remove
-  self._classes.add('hide');
+  self.el.classList.add('hide');
   if (self._effect) {
     setTimeout(function(){
       self.remove();

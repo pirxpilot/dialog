@@ -17,7 +17,6 @@
   ],
   "dependencies": {
     "@pirxpilot/overlay": "*",
-    "component-classes": "*",
     "component-domify": "*",
     "component-emitter": "^1.0.0",
     "component-event": "*",
@@ -28,7 +27,6 @@
     "overlay": "@pirxpilot/overlay",
     "domify": "component-domify",
     "event": "component-event",
-    "classes": "component-classes",
     "query": "component-query"
   },
   "browserify": {
