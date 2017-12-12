@@ -17,18 +17,14 @@
   ],
   "dependencies": {
     "@pirxpilot/overlay": "*",
-    "component-classes": "*",
     "component-domify": "*",
     "component-emitter": "^1.0.0",
-    "component-event": "*",
     "component-query": "*"
   },
   "browser": {
     "emitter": "component-emitter",
     "overlay": "@pirxpilot/overlay",
     "domify": "component-domify",
-    "event": "component-event",
-    "classes": "component-classes",
     "query": "component-query"
   },
   "browserify": {
@@ -36,9 +32,12 @@
       "stringify"
     ]
   },
+  "stringify": {
+    "minify": true
+  },
   "license": "MIT",
   "devDependencies": {
-    "stringify": "^3.1.0"
+    "stringify": "~5"
   },
   "files": [
     "index.js",
