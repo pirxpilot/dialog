@@ -18,14 +18,12 @@
   "dependencies": {
     "@pirxpilot/overlay": "*",
     "component-domify": "*",
-    "component-emitter": "^1.0.0",
-    "component-query": "*"
+    "component-emitter": "^1.0.0"
   },
   "browser": {
     "emitter": "component-emitter",
     "overlay": "@pirxpilot/overlay",
-    "domify": "component-domify",
-    "query": "component-query"
+    "domify": "component-domify"
   },
   "browserify": {
     "transform": [

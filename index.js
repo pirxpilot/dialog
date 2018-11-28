@@ -5,8 +5,7 @@
 
 var Emitter = require('emitter')
   , overlay = require('overlay')
-  , domify = require('domify')
-  , query = require('query');
+  , domify = require('domify');
 
 /**
  * Active dialog.
@@ -91,11 +90,11 @@ Dialog.prototype.render = function(options){
   var self = this
     , el = self.el
     , title = options.title
-    , titleEl = query('.title', el)
-    , pEl = query('p', el)
+    , titleEl = el.querySelector('.title')
+    , pEl = el.querySelector('p')
     , msg = options.message;
 
-  query('.close', el).addEventListener('click', function (ev) {
+  el.querySelector('.close').addEventListener('click', function (ev) {
     ev.preventDefault();
     self.emit('close');
     self.hide();
