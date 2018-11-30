@@ -3,15 +3,16 @@
  * Module dependencies.
  */
 
-var Emitter = require('emitter')
-  , overlay = require('overlay')
-  , domify = require('domify');
+const Emitter = require('component-emitter');
+
+const overlay = require('@pirxpilot/overlay');
+const domify = require('component-domify');
 
 /**
  * Active dialog.
  */
 
-var active;
+let active;
 
 /**
  * Expose `dialog()`.
@@ -19,30 +20,6 @@ var active;
 
 exports = module.exports = dialog;
 
-/**
- * Expose `Dialog`.
- */
-
-exports.Dialog = Dialog;
-
-/**
- * Return a new `Dialog` with the given
- * (optional) `title` and `msg`.
- *
- * @param {String} title or msg
- * @param {String} msg
- * @return {Dialog}
- * @api public
- */
-
-function dialog(title, msg){
-  switch (arguments.length) {
-    case 2:
-      return new Dialog({ title: title, message: msg });
-    case 1:
-      return new Dialog({ message: title });
-  }
-}
 
 /**
  * Initialize a new `Dialog`.
@@ -61,248 +38,251 @@ function dialog(title, msg){
  * @api public
  */
 
-function Dialog(options) {
-  Emitter.call(this);
-  options = options || {};
-  this.template = require('./template.html');
-  this.el = domify(this.template);
-  this.render(options);
-  if (active && !active.hiding) active.hide();
-  if (exports.effect) this.effect(exports.effect);
-  this.on('escape', this.hide.bind(this));
-  active = this;
-}
+class Dialog extends Emitter {
+  constructor(options = {}) {
+    super();
+    this.template = require('./template.html');
+    this.el = domify(this.template);
+    this.render(options);
+    if (active && !active.hiding) active.hide();
+    if (exports.effect) this.effect(exports.effect);
+    this.on('escape', () => this.hide());
+    active = this;
+  }
 
-/**
- * Inherit from `Emitter.prototype`.
- */
+  /**
+   * Render with the given `options`.
+   *
+   * @param {Object} options
+   * @api public
+   */
 
-Dialog.prototype = new Emitter();
+  render({ message, title }) {
 
-/**
- * Render with the given `options`.
- *
- * @param {Object} options
- * @api public
- */
+    this.el.querySelector('.close').addEventListener('click', ev => {
+      ev.preventDefault();
+      this.emit('close');
+      this.hide();
+    });
 
-Dialog.prototype.render = function(options){
-  var self = this
-    , el = self.el
-    , title = options.title
-    , titleEl = el.querySelector('.title')
-    , pEl = el.querySelector('p')
-    , msg = options.message;
+    const titleEl = this.el.querySelector('.title');
+    if (titleEl) {
+      if (!title) {
+        titleEl.remove();
+      } else {
+        titleEl.textContent = title;
+      }
+    }
 
-  el.querySelector('.close').addEventListener('click', function (ev) {
-    ev.preventDefault();
-    self.emit('close');
-    self.hide();
-  });
-
-  if (titleEl) {
-    if (!title) {
-      titleEl.parentNode.removeChild(titleEl);
-    } else {
-      titleEl.textContent = title;
+    // message
+    const pEl = this.el.querySelector('p');
+    if ('string' === typeof message) {
+      pEl.textContent = message;
+    } else if (message) {
+      pEl.parentNode.replaceChild(message.el || message, pEl);
     }
   }
 
-  // message
-  if ('string' == typeof msg) {
-    pEl.textContent = msg;
-  } else if (msg) {
-    pEl.parentNode.insertBefore(msg.el || msg, pEl);
-    pEl.parentNode.removeChild(pEl);
+  /**
+   * Enable the dialog close link.
+   *
+   * @return {Dialog} for chaining
+   * @api public
+   */
+
+  closable() {
+    return this.addClass('closable');
   }
-};
+
+  /**
+   * Add class `name`.
+   *
+   * @param {String} name
+   * @return {Dialog}
+   * @api public
+   */
+
+  addClass(name) {
+    this.el.classList.add(name);
+    return this;
+  }
+
+  /**
+   * Set the effect to `type`.
+   *
+   * @param {String} type
+   * @return {Dialog} for chaining
+   * @api public
+   */
+
+  effect(type) {
+    this._effect = type;
+    this.addClass(type);
+    return this;
+  }
+
+  /**
+   * Make it modal!
+   *
+   * @return {Dialog} for chaining
+   * @api public
+   */
+
+  modal() {
+    this._overlay = overlay();
+    return this;
+  }
+
+  /**
+   * Add an overlay.
+   *
+   * @return {Dialog} for chaining
+   * @api public
+   */
+
+  overlay(opts) {
+    opts = opts || { closable: true };
+    const o = overlay(opts);
+    o.on('hide', () => {
+      this._overlay = null;
+      this.hide();
+    });
+    this._overlay = o;
+    return this;
+  }
+
+  /**
+   * Close the dialog when the escape key is pressed.
+   *
+   * @api public
+   */
+
+  escapable() {
+    // Save reference to remove listener later
+    if (!this._escKeyCallback) {
+      this._escKeyCallback = e => 'Escape' === e.key && this.emit('escape');
+    }
+    document.addEventListener('keydown', this._escKeyCallback);
+    return this;
+  }
+
+  /**
+   * Show the dialog.
+   *
+   * Emits "show" event.
+   *
+   * @return {Dialog} for chaining
+   * @api public
+   */
+
+  show() {
+    const overlay = this._overlay;
+
+    // overlay
+    if (overlay) {
+      overlay.show();
+      this.el.classList.add('modal');
+    }
+
+    // escape
+    if (!overlay || overlay.closable) this.escapable();
+
+    // show
+    document.body.appendChild(this.el);
+    // let render before removing hide for effects to kick in
+    setTimeout(() => this.el.classList.remove('hide'), 0);
+    this.emit('show');
+    return this;
+  }
+
+  /**
+   * Hide the overlay.
+   *
+   * @api private
+   */
+
+  hideOverlay() {
+    if (!this._overlay) return;
+    this._overlay.remove();
+    this._overlay = null;
+  }
+
+  /**
+   * Hide the dialog with optional delay of `ms`,
+   * otherwise the dialog is removed immediately.
+   *
+   * Emits "hide" event.
+   *
+   * @return {Number} ms
+   * @return {Dialog} for chaining
+   * @api public
+   */
+
+  hide(ms) {
+    if (this._escKeyCallback) {
+      document.removeEventListener('keydown', this._escKeyCallback);
+    }
+
+    // prevent thrashing - this isn't used
+    this.hiding = true;
+
+    // duration
+    if (ms) {
+      setTimeout(() => this.hide(), ms);
+      return this;
+    }
+
+    // hide / remove
+    this.el.classList.add('hide');
+    if (this._effect) {
+      setTimeout(() => this.remove(), 500);
+    } else {
+      this.remove();
+    }
+
+    // overlay
+    this.hideOverlay();
+
+    return this;
+  }
+
+  /**
+   * Hide the dialog without potential animation.
+   *
+   * @return {Dialog} for chaining
+   * @api public
+   */
+
+  remove() {
+    if (this.el.parentNode) {
+      this.emit('hide');
+      this.el.remove();
+    }
+    return this;
+  }
+}
 
 /**
- * Enable the dialog close link.
- *
- * @return {Dialog} for chaining
- * @api public
+ * Expose `Dialog`.
  */
 
-Dialog.prototype.closable = function(){
-  return this.addClass('closable');
-};
+exports.Dialog = Dialog;
 
 /**
- * Add class `name`.
+ * Return a new `Dialog` with the given
+ * (optional) `title` and `msg`.
  *
- * @param {String} name
+ * @param {String} title or msg
+ * @param {String} msg
  * @return {Dialog}
  * @api public
  */
 
-Dialog.prototype.addClass = function(name){
-  this.el.classList.add(name);
-  return this;
-};
-
-/**
- * Set the effect to `type`.
- *
- * @param {String} type
- * @return {Dialog} for chaining
- * @api public
- */
-
-Dialog.prototype.effect = function(type){
-  this._effect = type;
-  this.addClass(type);
-  return this;
-};
-
-/**
- * Make it modal!
- *
- * @return {Dialog} for chaining
- * @api public
- */
-
-Dialog.prototype.modal = function(){
-  this._overlay = overlay();
-  return this;
-};
-
-/**
- * Add an overlay.
- *
- * @return {Dialog} for chaining
- * @api public
- */
-
-Dialog.prototype.overlay = function(opts){
-  var self = this;
-  opts = opts || { closable: true };
-  var o = overlay(opts);
-  o.on('hide', function(){
-    self._overlay = null;
-    self.hide();
-  });
-  this._overlay = o;
-  return this;
-};
-
-/**
- * Close the dialog when the escape key is pressed.
- *
- * @api public
- */
-
-Dialog.prototype.escapable = function(){
-  var self = this;
-  // Save reference to remove listener later
-  self._escKeyCallback = self._escKeyCallback || function (e) {
-    e.which = e.which || e.keyCode;
-    if (27 !== e.which) return;
-    self.emit('escape');
-  };
-  document.addEventListener('keydown', self._escKeyCallback);
-  return this;
-};
-
-/**
- * Show the dialog.
- *
- * Emits "show" event.
- *
- * @return {Dialog} for chaining
- * @api public
- */
-
-Dialog.prototype.show = function(){
-  var overlay = this._overlay;
-  var self = this;
-
-  // overlay
-  if (overlay) {
-    overlay.show();
-    this.el.classList.add('modal');
+function dialog(title, message){
+  switch (arguments.length) {
+    case 2:
+      return new Dialog({ title, message });
+    case 1:
+      return new Dialog({ message: title });
   }
-
-  // escape
-  if (!overlay || overlay.closable) this.escapable();
-
-  // show
-  document.body.appendChild(this.el);
-  setTimeout(function() {
-    // let render before removing hide for effects to kick in
-    self.el.classList.remove('hide');
-  }, 0);
-  this.emit('show');
-  return this;
-};
-
-/**
- * Hide the overlay.
- *
- * @api private
- */
-
-Dialog.prototype.hideOverlay = function(){
-  if (!this._overlay) return;
-  this._overlay.remove();
-  this._overlay = null;
-};
-
-/**
- * Hide the dialog with optional delay of `ms`,
- * otherwise the dialog is removed immediately.
- *
- * Emits "hide" event.
- *
- * @return {Number} ms
- * @return {Dialog} for chaining
- * @api public
- */
-
-Dialog.prototype.hide = function(ms){
-  var self = this;
-
-  if (self._escKeyCallback) {
-    document.removeEventListener('keydown', self._escKeyCallback);
-  }
-
-  // prevent thrashing - this isn't used
-  self.hiding = true;
-
-  // duration
-  if (ms) {
-    setTimeout(function(){
-      self.hide();
-    }, ms);
-    return self;
-  }
-
-  // hide / remove
-  self.el.classList.add('hide');
-  if (self._effect) {
-    setTimeout(function(){
-      self.remove();
-    }, 500);
-  } else {
-    self.remove();
-  }
-
-  // overlay
-  self.hideOverlay();
-
-  return self;
-};
-/**
- * Hide the dialog without potential animation.
- *
- * @return {Dialog} for chaining
- * @api public
- */
-
-Dialog.prototype.remove = function(){
-  if (this.el.parentNode) {
-    this.emit('hide');
-    this.el.parentNode.removeChild(this.el);
-  }
-  return this;
-};
+}

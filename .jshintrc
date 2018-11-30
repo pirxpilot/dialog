@@ -1,13 +1,13 @@
 {
+  "eqeqeq": true,
+  "eqnull": true,
+  "immed": true,
+  "latedef": "nofunc",
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
   "undef": true,
   "unused": true,
-  "laxbreak": true,
-  "laxcomma": true,
-  "browser": true,
-  "globals": {
-    "console": false,
-    "exports": true,
-    "require": false,
-    "module": false
-  }
+  "browserify": true,
+  "esversion": 6
 }
