@@ -20,11 +20,6 @@
     "component-domify": "*",
     "component-emitter": "^1.0.0"
   },
-  "browser": {
-    "emitter": "component-emitter",
-    "overlay": "@pirxpilot/overlay",
-    "domify": "component-domify"
-  },
   "browserify": {
     "transform": [
       "stringify"
