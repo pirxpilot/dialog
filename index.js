@@ -38,10 +38,22 @@ exports = module.exports = dialog;
  * @api public
  */
 
+const template = `
+<div class="dialog hide">
+  <div class="content">
+    <span class="title"></span>
+    <a href="#" class="close"></a>
+    <div class="body">
+        <p></p>
+    </div>
+  </div>
+</div>
+`;
+
 class Dialog extends Emitter {
   constructor(options = {}) {
     super();
-    this.template = require('./template.html');
+    this.template = template;
     this.el = domify(this.template);
     this.render(options);
     if (active && !active.hiding) active.hide();
