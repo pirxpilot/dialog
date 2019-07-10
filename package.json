@@ -20,21 +20,9 @@
     "component-domify": "*",
     "component-emitter": "^1.0.0"
   },
-  "browserify": {
-    "transform": [
-      "stringify"
-    ]
-  },
-  "stringify": {
-    "minify": true
-  },
   "license": "MIT",
-  "devDependencies": {
-    "stringify": "~5"
-  },
   "files": [
     "index.js",
-    "dialog.css",
-    "template.html"
+    "dialog.css"
   ]
 }
