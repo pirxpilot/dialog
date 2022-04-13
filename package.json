@@ -17,7 +17,6 @@
   ],
   "dependencies": {
     "@pirxpilot/overlay": "*",
-    "component-domify": "*",
     "component-emitter": "^1.0.0"
   },
   "license": "MIT",
