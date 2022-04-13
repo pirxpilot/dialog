@@ -6,7 +6,6 @@
 const Emitter = require('component-emitter');
 
 const overlay = require('@pirxpilot/overlay');
-const domify = require('component-domify');
 
 /**
  * Active dialog.
@@ -50,11 +49,17 @@ const template = `
 </div>
 `;
 
+function fromTemplate(template) {
+  const p = document.createElement('div');
+  p.innerHTML = template;
+  return p.removeChild(p.firstElementChild);
+}
+
 class Dialog extends Emitter {
   constructor(options = {}) {
     super();
     this.template = template;
-    this.el = domify(this.template);
+    this.el = fromTemplate(this.template);
     this.render(options);
     if (active && !active.hiding) active.hide();
     if (exports.effect) this.effect(exports.effect);
