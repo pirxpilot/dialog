@@ -16,7 +16,6 @@
     "modal"
   ],
   "dependencies": {
-    "@pirxpilot/overlay": "*",
     "component-emitter": "^1.0.0"
   },
   "license": "MIT",

@@ -1,25 +1,24 @@
-<!DOCTYPE 5>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Dialog</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="../build/build.css" />
     <style>
-      .dialog .title {
+      dialog .title {
         display: inline-block;
         margin: 0 0 5px 0;
         font-size: 18px;
         font-weight: normal;
       }
-      .dialog p {
+      dialog p {
          margin: 0;
          padding: 0;
          font-size: .9em;
       }
-      .dialog.off-center {
-        top: 20px;
-        left: 15%;
-        transform: translateX(0);
+      dialog.off-center {
+        margin-top: 20px;
+        margin-left: 10vw;
       }
     </style>
   </head>
@@ -53,7 +52,6 @@
 
             dialog('Title', h3)
             .effect('scale')
-            // .overlay()
             .show()
             .hide(1000)
             .on('hide', function(){
@@ -61,7 +59,7 @@
 
               dialog('Click the overlay to close')
               .effect('slide')
-              .overlay()
+              .closable()
               .show()
               .on('hide', function(){
                 console.log('closed fifth');
@@ -76,7 +74,7 @@
 
                   dialog('Escape')
                   .effect('fade')
-                  .overlay()
+                  .modal()
                   .show()
                   .on('hide', function(){
                     console.log('closed seventh');

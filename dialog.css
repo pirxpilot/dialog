@@ -1,22 +1,17 @@
-.dialog {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 150px;
+dialog {
   max-width: 600px;
   min-width: 250px;
   border: 1px solid #eee;
   background: white;
-  z-index: 1000;
 }
 
-.dialog .content {
+dialog .content {
   padding: 15px 20px;
 }
 
 /* close */
 
-.dialog .close {
+dialog .close {
   position: absolute;
   top: 3px;
   right: 5px;
@@ -27,50 +22,92 @@
   display: none;
 }
 
-.dialog .close:before {
+dialog .close:before {
   content: '✕'
 }
 
-.dialog.closable .close {
+dialog.closable .close {
   display: block;
 }
 
-.dialog .close:hover {
+dialog .close:hover {
   color: black;
 }
 
-.dialog .close:active {
+dialog .close:active {
   margin-top: 1px;
+}
+
+dialog {
+  transition-behavior: allow-discrete;
+  transition-timing-function: ease-out;
+  transition-duration: 0.4s;
 }
 
 /* slide */
 
-.dialog.slide {
-  transition: opacity 300ms, top 300ms;
+dialog.slide {
+  opacity: 0;
+  margin-top: -500px;
+  transition-property:
+    opacity,
+    margin-top,
+    overlay,
+    display;
 }
 
-.dialog.slide.hide {
-  opacity: 0;
-  top: -500px;
+dialog[open].slide {
+  opacity: 1;
+  margin-top: 0;
+}
+
+@starting-style {
+  dialog[open].slide {
+    margin-top: -100%;
+    opacity: 0;
+  }
 }
 
 /* fade */
 
-.dialog.fade {
-  transition: opacity 300ms;
+dialog.fade {
+  opacity: 0;
+  transition-property:
+    opacity,
+    overlay,
+    display;
 }
 
-.dialog.fade.hide {
-  opacity: 0;
+dialog[open].fade {
+  opacity: 1;
+}
+
+@starting-style {
+  dialog[open].fade {
+    opacity: 0;
+  }
 }
 
 /* scale */
 
-.dialog.scale {
-  transition: transform 300ms;
+dialog.scale {
+  opacity: 0;
+  transform: scale(0);
+  transition-property:
+    opacity,
+    transform,
+    overlay,
+    display;
+}
+
+dialog[open].scale {
+  opacity: 1;
   transform: scale(1);
 }
 
-.dialog.scale.hide {
-  transform: scale(0);
+@starting-style {
+  dialog[open].scale {
+    opacity: 0;
+    transform: scale(0);
+  }
 }
