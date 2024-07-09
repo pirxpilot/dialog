@@ -37,9 +37,9 @@ exports = module.exports = dialog;
 
 const template = `
 <dialog>
+  <form method="dialog"><button value="cancel" class="close"></button></form>
   <div class="content">
     <span class="title"></span>
-    <a href="#" class="close"></a>
     <div class="body">
         <p></p>
     </div>
@@ -72,10 +72,6 @@ class Dialog extends Emitter {
    */
 
   render({ message, title }) {
-    this.el.querySelector('.close').addEventListener('click', ev => {
-      ev.preventDefault();
-      this.hide();
-    });
     this.el.addEventListener('close', () => this.remove());
 
     const titleEl = this.el.querySelector('.title');
