@@ -1,4 +1,12 @@
 
+3.0.0 / 2024-07-11
+==================
+
+ * reimplement `escapable` method
+ * implement .close as a button
+ * reimplement dialog using dialog API
+ * switch from browserify to esbuild
+
 2.0.2 / 2022-04-13
 ==================
 
