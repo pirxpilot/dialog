@@ -5,8 +5,6 @@
 
 const Emitter = require('component-emitter');
 
-const overlay = require('@pirxpilot/overlay');
-
 /**
  * Active dialog.
  */
@@ -38,15 +36,15 @@ exports = module.exports = dialog;
  */
 
 const template = `
-<div class="dialog hide">
+<dialog>
+  <form method="dialog"><button value="cancel" class="close"></button></form>
   <div class="content">
     <span class="title"></span>
-    <a href="#" class="close"></a>
     <div class="body">
         <p></p>
     </div>
   </div>
-</div>
+</dialog>
 `;
 
 function fromTemplate(template) {
@@ -63,7 +61,6 @@ class Dialog extends Emitter {
     this.render(options);
     if (active && !active.hiding) active.hide();
     if (exports.effect) this.effect(exports.effect);
-    this.on('escape', () => this.hide());
     active = this;
   }
 
@@ -75,11 +72,11 @@ class Dialog extends Emitter {
    */
 
   render({ message, title }) {
-
-    this.el.querySelector('.close').addEventListener('click', ev => {
-      ev.preventDefault();
-      this.emit('close');
-      this.hide();
+    this.el.addEventListener('close', () => this.remove());
+    this.el.addEventListener('cancel', e => {
+      if (this._preventEscape) {
+        e.preventDefault();
+      }
     });
 
     const titleEl = this.el.querySelector('.title');
@@ -146,40 +143,12 @@ class Dialog extends Emitter {
    */
 
   modal() {
-    this._overlay = overlay();
+    this._modal = true;
     return this;
   }
 
-  /**
-   * Add an overlay.
-   *
-   * @return {Dialog} for chaining
-   * @api public
-   */
-
-  overlay(opts) {
-    opts = opts || { closable: true };
-    const o = overlay(opts);
-    o.on('hide', () => {
-      this._overlay = null;
-      this.hide();
-    });
-    this._overlay = o;
-    return this;
-  }
-
-  /**
-   * Close the dialog when the escape key is pressed.
-   *
-   * @api public
-   */
-
-  escapable() {
-    // Save reference to remove listener later
-    if (!this._escKeyCallback) {
-      this._escKeyCallback = e => 'Escape' === e.key && this.emit('escape');
-    }
-    document.addEventListener('keydown', this._escKeyCallback);
+  escapable(opt = true) {
+    this._preventEscape = !opt;
     return this;
   }
 
@@ -193,35 +162,14 @@ class Dialog extends Emitter {
    */
 
   show() {
-    const overlay = this._overlay;
-
-    // overlay
-    if (overlay) {
-      overlay.show();
-      this.el.classList.add('modal');
-    }
-
-    // escape
-    if (!overlay || overlay.closable) this.escapable();
-
-    // show
     document.body.appendChild(this.el);
-    // let render before removing hide for effects to kick in
-    setTimeout(() => this.el.classList.remove('hide'), 0);
+    if (this._modal) {
+      this.el.showModal();
+    } else {
+      this.el.show();
+    }
     this.emit('show');
     return this;
-  }
-
-  /**
-   * Hide the overlay.
-   *
-   * @api private
-   */
-
-  hideOverlay() {
-    if (!this._overlay) return;
-    this._overlay.remove();
-    this._overlay = null;
   }
 
   /**
@@ -236,10 +184,6 @@ class Dialog extends Emitter {
    */
 
   hide(ms) {
-    if (this._escKeyCallback) {
-      document.removeEventListener('keydown', this._escKeyCallback);
-    }
-
     // prevent thrashing - this isn't used
     this.hiding = true;
 
@@ -249,17 +193,7 @@ class Dialog extends Emitter {
       return this;
     }
 
-    // hide / remove
-    this.el.classList.add('hide');
-    if (this._effect) {
-      setTimeout(() => this.remove(), 500);
-    } else {
-      this.remove();
-    }
-
-    // overlay
-    this.hideOverlay();
-
+    this.el.close();
     return this;
   }
 
@@ -272,7 +206,7 @@ class Dialog extends Emitter {
 
   remove() {
     if (this.el.parentNode) {
-      this.emit('hide');
+      this.emit('hide', this.el.returnValue);
       this.el.remove();
     }
     return this;

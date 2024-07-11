@@ -1,7 +1,5 @@
 PROJECT=dialog
-CSS=\
-	node_modules/@pirxpilot/overlay/overlay.css \
-	dialog.css
+CSS=dialog.css
 
 all: check compile
 
