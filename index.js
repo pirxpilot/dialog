@@ -73,6 +73,11 @@ class Dialog extends Emitter {
 
   render({ message, title }) {
     this.el.addEventListener('close', () => this.remove());
+    this.el.addEventListener('cancel', e => {
+      if (this._preventEscape) {
+        e.preventDefault();
+      }
+    });
 
     const titleEl = this.el.querySelector('.title');
     if (titleEl) {
@@ -139,6 +144,11 @@ class Dialog extends Emitter {
 
   modal() {
     this._modal = true;
+    return this;
+  }
+
+  escapable(opt = true) {
+    this._preventEscape = !opt;
     return this;
   }
 
