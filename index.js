@@ -1,20 +1,10 @@
-/**
- * Module dependencies.
- */
-
-const Emitter = require('component-emitter');
+import Emitter from 'component-emitter';
 
 /**
  * Active dialog.
  */
 
 let active;
-
-/**
- * Expose `dialog()`.
- */
-
-module.exports = dialog;
 
 /**
  * Initialize a new `Dialog`.
@@ -51,7 +41,7 @@ function fromTemplate(template) {
   return p.removeChild(p.firstElementChild);
 }
 
-class Dialog extends Emitter {
+export class Dialog extends Emitter {
   constructor(options = {}) {
     super();
     this.template = template;
@@ -212,12 +202,6 @@ class Dialog extends Emitter {
 }
 
 /**
- * Expose `Dialog`.
- */
-
-dialog.Dialog = Dialog;
-
-/**
  * Return a new `Dialog` with the given
  * (optional) `title` and `msg`.
  *
@@ -227,7 +211,7 @@ dialog.Dialog = Dialog;
  * @api public
  */
 
-function dialog(title, message) {
+export default function dialog(title, message) {
   // biome-ignore lint/style/noArguments: <explanation>
   switch (arguments.length) {
     case 2:
