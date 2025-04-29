@@ -31,7 +31,7 @@ dialog .close {
 }
 
 dialog .close:before {
-  content: '✕'
+  content: "✕";
 }
 
 dialog.closable .close {
@@ -57,11 +57,7 @@ dialog {
 dialog.slide {
   opacity: 0;
   margin-top: -500px;
-  transition-property:
-    opacity,
-    margin-top,
-    overlay,
-    display;
+  transition-property: opacity, margin-top, overlay, display;
 }
 
 dialog[open].slide {
@@ -80,10 +76,7 @@ dialog[open].slide {
 
 dialog.fade {
   opacity: 0;
-  transition-property:
-    opacity,
-    overlay,
-    display;
+  transition-property: opacity, overlay, display;
 }
 
 dialog[open].fade {
@@ -101,11 +94,7 @@ dialog[open].fade {
 dialog.scale {
   opacity: 0;
   transform: scale(0);
-  transition-property:
-    opacity,
-    transform,
-    overlay,
-    display;
+  transition-property: opacity, transform, overlay, display;
 }
 
 dialog[open].scale {

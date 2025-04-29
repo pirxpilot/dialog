@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -15,8 +14,7 @@ let active;
  * Expose `dialog()`.
  */
 
-exports = module.exports = dialog;
-
+module.exports = dialog;
 
 /**
  * Initialize a new `Dialog`.
@@ -60,7 +58,7 @@ class Dialog extends Emitter {
     this.el = fromTemplate(this.template);
     this.render(options);
     if (active && !active.hiding) active.hide();
-    if (exports.effect) this.effect(exports.effect);
+    if (dialog.effect) this.effect(dialog.effect);
     active = this;
   }
 
@@ -217,7 +215,7 @@ class Dialog extends Emitter {
  * Expose `Dialog`.
  */
 
-exports.Dialog = Dialog;
+dialog.Dialog = Dialog;
 
 /**
  * Return a new `Dialog` with the given
@@ -229,7 +227,8 @@ exports.Dialog = Dialog;
  * @api public
  */
 
-function dialog(title, message){
+function dialog(title, message) {
+  // biome-ignore lint/style/noArguments: <explanation>
   switch (arguments.length) {
     case 2:
       return new Dialog({ title, message });
