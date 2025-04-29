@@ -6,7 +6,10 @@ all: check compile
 check: lint
 
 lint:
-	jshint index.js
+	biome ci
+
+format:
+	biome check --fix
 
 compile: build/build.js build/build.css
 
@@ -26,7 +29,8 @@ build/build.css: $(CSS) | build
 	cat $^ > $@
 
 node_modules: package.json
-	npm install
+	yarn
+	touch $@
 
 clean:
 	rm -fr build node_modules
