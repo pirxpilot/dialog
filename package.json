@@ -16,7 +16,7 @@
     "modal"
   ],
   "dependencies": {
-    "component-emitter": "^1.0.0"
+    "component-emitter": "~2"
   },
   "license": "MIT",
   "files": [
